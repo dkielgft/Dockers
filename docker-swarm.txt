@@ -1,0 +1,58 @@
+yum install yum-utils lvm2 device-mapper-persistent-data elinks
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce
+systemctl enable docker
+systemctl start docker
+usermod -a -G docker dkiel
+
+su - dkiel
+docker run hello-world
+docker ps
+docker ps -a
+docker image pull alpine:latest
+docker history alpine
+
+docker image pull http
+docker history httpd
+docker history httpd --no-trunc
+
+
+
+docker swarm init --advertise-addr 192.168.56.114
+
+For each node and the manager
+firewall-cmd --add-port=2377/tcp --permanent
+firewall-cmd --add-port=2376/tcp --permanent
+firewall-cmd --add-port=7946/tcp --permanent
+firewall-cmd --add-port=7946/udp --permanent
+firewall-cmd --add-port=4789/udp --permanent
+firewall-cmd --add-port=80/tcp --permanent 
+firewall-cmd --reload
+
+Workers:
+	docker swarm join --token SWMTKN-1-3psrldz0yyyky911hgautqn0f7j8um22jithhwhkzm1pnmnqmn-59p00o1ovc26v1g0r29iavsv4 192.168.56.114:2377
+
+docker node ls
+docker run -d httpd
+docker ps
+docker service create --replicas 2 -p 80:80 --name myweb nginx
+docker service ls
+docker service ps <name>
+docker service rm <name>
+
+docker service ls
+docker service ps myweb
+
+
+In case, you want to retrieve a lost join token, run the command below
+docker swarm join-token manager -q
+
+Scaling up and down containers for the service
+Up
+docker service scale webserver=10
+
+Down
+docker service scale webserver=2
+
+Source:
+https://hostadvice.com/how-to/how-to-setup-docker-swarm-cluster-on-centos-7/
