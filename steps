@@ -1,0 +1,4 @@
+vim Dockerfile
+sudo docker build -t deiverk/ubuntu_terraform_python3:latest .
+sudo docker images
+sudo docker push deiverk/ubuntu_terraform_python3:latest
